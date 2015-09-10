@@ -1,8 +1,8 @@
 (export (version D)
   (design
-    (source D:/projects/ElecSnip/HS_Pair_Test/simple/simple.sch)
-    (date "09/09/2015 22:46:28")
-    (tool "Eeschema (2015-08-16 BZR 6097, Git b384c94)-product")
+    (source "E:/mkhairy/Mes documents/perso/elecsnip/HS_Pair_Test/simple/simple.sch")
+    (date "10/09/2015 12:02:04")
+    (tool "Eeschema (2015-08-01 BZR 6032, Git 6a6a55f)-product")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
         (title)
@@ -17,13 +17,13 @@
   (components
     (comp (ref P102)
       (value CONN_01X02)
-      (footprint Connectors_254mm:pin_array_2x1)
+      (footprint test:TEST_01x02_05mm)
       (libsource (lib conn) (part CONN_01X02))
       (sheetpath (names /) (tstamps /))
       (tstamp 55F09831))
     (comp (ref P101)
       (value CONN_01X02)
-      (footprint Connectors_254mm:pin_array_2x1)
+      (footprint test:TEST_01x02_05mm)
       (libsource (lib conn) (part CONN_01X02))
       (sheetpath (names /) (tstamps /))
       (tstamp 55F0991E))
