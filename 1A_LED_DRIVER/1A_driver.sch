@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="mm"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -9914,7 +9914,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="default" width="0" drill="0">
+<class number="0" name="default" width="0.1524" drill="0.3">
+<clearance class="0" value="0.1524"/>
+</class>
+<class number="1" name="power" width="0.254" drill="0.3">
+<clearance class="1" value="0.254"/>
 </class>
 </classes>
 <parts>
@@ -10004,7 +10008,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <busses>
 </busses>
 <nets>
-<net name="GND" class="0">
+<net name="GND" class="1">
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND@17"/>
 <pinref part="SUPPLY1" gate="GND" pin="GND"/>
@@ -10065,7 +10069,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="165.1" y1="157.48" x2="165.1" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="I_P" class="0">
+<net name="I_P" class="1">
 <segment>
 <pinref part="U$1" gate="G$1" pin="ISP@13"/>
 <wire x1="213.36" y1="129.54" x2="236.22" y2="129.54" width="0.1524" layer="91"/>
@@ -10091,7 +10095,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="223.52" y="129.54" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="I_N" class="0">
+<net name="I_N" class="1">
 <segment>
 <pinref part="U$1" gate="G$1" pin="ISN@12"/>
 <wire x1="213.36" y1="127" x2="254" y2="127" width="0.1524" layer="91"/>
@@ -10114,7 +10118,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="246.38" y1="111.76" x2="254" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="N$4" class="1">
 <segment>
 <pinref part="D1" gate="A" pin="A"/>
 <wire x1="238.76" y1="137.16" x2="238.76" y2="147.32" width="0.1524" layer="91"/>
@@ -10131,7 +10135,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="238.76" y1="149.86" x2="228.6" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="I_LED" class="0">
+<net name="I_LED" class="1">
 <segment>
 <pinref part="Q1" gate="G$1" pin="D"/>
 <wire x1="259.08" y1="104.14" x2="259.08" y2="99.06" width="0.1524" layer="91"/>
@@ -10153,7 +10157,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <junction x="236.22" y="111.76"/>
 </segment>
 </net>
-<net name="VIN" class="0">
+<net name="VIN" class="1">
 <segment>
 <pinref part="X1" gate="-2" pin="S"/>
 <wire x1="266.7" y1="96.52" x2="248.92" y2="96.52" width="0.1524" layer="91"/>
