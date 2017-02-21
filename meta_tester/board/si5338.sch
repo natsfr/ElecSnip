@@ -32,6 +32,7 @@ LIBS:si5338
 LIBS:passives
 LIBS:xtals
 LIBS:power_symbols
+LIBS:meta_tester_si5338-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268

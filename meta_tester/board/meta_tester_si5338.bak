@@ -32,11 +32,12 @@ LIBS:si5338
 LIBS:passives
 LIBS:xtals
 LIBS:power_symbols
+LIBS:meta_tester_si5338-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 2
+Sheet 1 1
 Title ""
 Date ""
 Rev ""
@@ -47,8 +48,8 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Sheet
-S 4695 3320 2195 1170
-U 58AB218B
+S 2550 1700 2250 1400
+U 58AB73A8
 F0 "SI5338" 39
 F1 "si5338.sch" 39
 $EndSheet
