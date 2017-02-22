@@ -32,6 +32,8 @@ LIBS:si5338
 LIBS:passives
 LIBS:xtals
 LIBS:power_symbols
+LIBS:tca0372
+LIBS:MAX571X-TSSOP14
 LIBS:meta_tester_si5338-cache
 EELAYER 25 0
 EELAYER END

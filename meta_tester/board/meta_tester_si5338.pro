@@ -1,4 +1,4 @@
-update=20/02/2017 16:54:17
+update=21/02/2017 14:24:49
 version=1
 last_client=kicad
 [pcbnew]
@@ -62,3 +62,5 @@ LibName30=Oscillator/ClockGen/si5338
 LibName31=Passive/passives
 LibName32=Oscillator/Xtal/xtals
 LibName33=Power/power_symbols
+LibName34=Amplifier/OnSemi/tca0372
+LibName35=DAC/MAXIM/MAX571X-TSSOP14
