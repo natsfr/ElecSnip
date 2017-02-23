@@ -593,7 +593,7 @@ F 3 "" H 7600 1450 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L USB_OTG P101
+L USB_OTG-RESCUE-meta_tester_si5338 P101
 U 1 1 58AEF4E6
 P 8825 1450
 F 0 "P101" H 9150 1325 50  0000 C CNN
@@ -1766,9 +1766,9 @@ Text Label 8125 1400 2    25   ~ 0
 US1_TX
 Text Label 8125 1350 2    25   ~ 0
 US1_RX
-Text Label 7100 1450 0    25   ~ 0
-US1_RTS
 Text Label 7100 1700 0    25   ~ 0
+US1_RTS
+Text Label 7100 1450 0    25   ~ 0
 US1_CTS
 Wire Wire Line
 	4800 1300 4800 975 
