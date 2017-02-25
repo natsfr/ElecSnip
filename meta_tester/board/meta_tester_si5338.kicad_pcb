@@ -2,8 +2,8 @@
 
   (general
     (links 241)
-    (no_connects 222)
-    (area 138.924999 84.924999 198.075001 125.075001)
+    (no_connects 219)
+    (area 73.75 39.15 198.075001 136.848501)
     (thickness 1.6)
     (drawings 4)
     (tracks 24)
@@ -915,7 +915,7 @@
   )
 
   (module SOT:SOT-236-095mm (layer F.Cu) (tedit 0) (tstamp 58AE602D)
-    (at 130 106)
+    (at 156.05 90.6)
     (path /58AF8BF5)
     (fp_text reference U106 (at 6 -2 180) (layer F.SilkS)
       (effects (font (size 1.2 1.2) (thickness 0.15)))
