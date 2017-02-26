@@ -1,0 +1,36 @@
+***************************************************************
+* INFINEON Discrete & RF Semiconductors
+* RF-PACKAGE EQUIVALENT CIRCUIT  (SPICE SYNTAX)
+* VALID UP TO 6 GHZ
+* >>> Single Diodes in TSSLP-2 <<<
+* FILENAME: TSSLP-2.TXT
+* (C) 2001 Infineon Technologies AG
+* Version 1.0                May 2007         A. Boehme
+***************************************************************
+*
+*                           CAC
+*             (10)          | |          (20)
+*              +------------| |------------+
+*              |            | |            |
+*         LAO  |                           |  LCO
+*     A---LLL--+                           +--LLL---C
+*   (100)      |                           |      (200)
+*              |  LAI                      |
+*              +--LLL---A' CHIP  C'--------+
+*                      (1)      (2)
+*
+* 1    = ANODE OF CHIP
+* 2    = CATHODE OF CHIP
+* 100  = ANODE OF COMPLETE DIODE IN PACKAGE
+* 200  = CATHODE OF COMPLETE DIODE IN PACKAGE
+*
+.SUBCKT TSSLP-2 100 200
+LAI    1   10    L=0.18nH
+CAC   10   20    C=60fF
+LAO   10  100    L=0.01nH
+LCO   20  200    L=0.01nH
+.ENDS TSSLP-2
+***************************************************************
+* Add Spice model or discrete equivalent circuit for chip
+* between terminals (1) and (2)
+***************************************************************
