@@ -2,8 +2,8 @@
 
   (general
     (links 253)
-    (no_connects 180)
-    (area 138.924999 84.924999 198.075001 125.075001)
+    (no_connects 170)
+    (area 137.974999 84.464286 198.075001 126.136)
     (thickness 1.6)
     (drawings 4)
     (tracks 297)
@@ -22,8 +22,8 @@
     (33 F.Adhes user)
     (34 B.Paste user)
     (35 F.Paste user)
-    (36 B.SilkS user)
-    (37 F.SilkS user)
+    (36 B.SilkS user hide)
+    (37 F.SilkS user hide)
     (38 B.Mask user)
     (39 F.Mask user)
     (40 Dwgs.User user)
@@ -64,7 +64,7 @@
     (pad_drill 0.762)
     (pad_to_mask_clearance 0)
     (aux_axis_origin 0 0)
-    (visible_elements 7FFFFFFF)
+    (visible_elements 7FFFFF7F)
     (pcbplotparams
       (layerselection 0x00030_80000001)
       (usegerberextensions false)
@@ -2227,7 +2227,7 @@
   )
 
   (module General_SMD:SM0603 locked (layer B.Cu) (tedit 54EC8D93) (tstamp 58AFFD56)
-    (at 164.262 101.75)
+    (at 164.262 105)
     (path /58B04473)
     (attr smd)
     (fp_text reference R103 (at 0 1.27) (layer B.SilkS)
@@ -2252,7 +2252,7 @@
   )
 
   (module General_SMD:SM0603 (layer B.Cu) (tedit 54EC8D93) (tstamp 58AFFD5F)
-    (at 164.238 108.25)
+    (at 164.462 101.7)
     (path /58B04002)
     (attr smd)
     (fp_text reference R104 (at 0 1.27) (layer B.SilkS)
@@ -3104,6 +3104,26 @@
       (pts
         (xy 173.175 95.281066) (xy 173.175 100.925) (xy 172.325 100.925) (xy 172.325 98.5) (xy 172.319091 98.470821)
         (xy 172.303033 98.446967) (xy 171.825 97.968934) (xy 171.825 95.281066) (xy 172.031066 95.075) (xy 172.968934 95.075)
+      )
+    )
+  )
+  (zone (net 2) (net_name +3V3) (layer F.Cu) (tstamp 0) (hatch edge 0.508)
+    (connect_pads yes (clearance 0.15))
+    (min_thickness 0.15)
+    (fill yes (arc_segments 16) (thermal_gap 0.508) (thermal_bridge_width 0.508))
+    (polygon
+      (pts
+        (xy 159.7 92.9) (xy 161.2 92.9) (xy 161.6 93.3) (xy 163 93.3) (xy 163.2 93.1)
+        (xy 163.2 91.9) (xy 163 91.7) (xy 161.9 91.7) (xy 161.4 92.2) (xy 159.8 92.2)
+        (xy 159.6 92.4) (xy 159.6 92.8)
+      )
+    )
+    (filled_polygon
+      (pts
+        (xy 163.125 91.931066) (xy 163.125 93.068934) (xy 162.968934 93.225) (xy 161.631066 93.225) (xy 161.253033 92.846967)
+        (xy 161.228222 92.830512) (xy 161.2 92.825) (xy 159.731066 92.825) (xy 159.675 92.768934) (xy 159.675 92.431066)
+        (xy 159.831066 92.275) (xy 161.4 92.275) (xy 161.429179 92.269091) (xy 161.453033 92.253033) (xy 161.931066 91.775)
+        (xy 162.968934 91.775)
       )
     )
   )
