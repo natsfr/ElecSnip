@@ -79,15 +79,11 @@ $EndSheet
 Wire Wire Line
 	5790 4800 5790 3995
 Wire Wire Line
-	5540 3995 7640 3995
-Wire Wire Line
 	5840 5300 5840 5580
 Wire Wire Line
 	5540 5580 6350 5580
 Wire Wire Line
 	6350 5580 6350 4095
-Wire Wire Line
-	6350 4095 7640 4095
 Wire Wire Line
 	5840 4800 5840 4600
 $Comp
@@ -184,20 +180,16 @@ Wire Wire Line
 	4385 4455 4385 4535
 Connection ~ 4385 4535
 Wire Wire Line
-	4260 3795 7640 3795
-Wire Wire Line
-	5070 3895 7640 3895
-Wire Wire Line
 	4510 3795 4510 4595
 Wire Wire Line
 	5070 5375 5070 3895
-Text Label 6655 3795 0    39   ~ 0
+Text Label 6630 4095 0    39   ~ 0
 VddO0
-Text Label 6655 3895 0    39   ~ 0
+Text Label 6600 3995 0    39   ~ 0
 VddO1
-Text Label 6655 3995 0    39   ~ 0
+Text Label 6835 3895 0    39   ~ 0
 VddO2
-Text Label 6655 4095 0    39   ~ 0
+Text Label 6830 3795 0    39   ~ 0
 VddO3
 $Comp
 L MAX5713/4/5-TSSOP14 U101
@@ -2263,4 +2255,36 @@ Wire Wire Line
 	5185 5660 3115 5660
 Text Label 4800 2500 1    25   ~ 0
 5338_INT
+Wire Wire Line
+	5070 3895 7160 3895
+Wire Wire Line
+	7160 3895 7160 3995
+Wire Wire Line
+	7160 3995 7640 3995
+Wire Wire Line
+	4260 3795 7365 3795
+Wire Wire Line
+	7365 3795 7365 4095
+Wire Wire Line
+	7365 4095 7640 4095
+Wire Wire Line
+	5540 3995 7060 3995
+Wire Wire Line
+	7060 3995 7060 3935
+Wire Wire Line
+	7060 3935 7545 3935
+Wire Wire Line
+	7545 3935 7545 3895
+Wire Wire Line
+	7545 3895 7640 3895
+Wire Wire Line
+	6350 4095 7300 4095
+Wire Wire Line
+	7300 4095 7300 3835
+Wire Wire Line
+	7300 3835 7460 3835
+Wire Wire Line
+	7460 3835 7460 3795
+Wire Wire Line
+	7460 3795 7640 3795
 $EndSCHEMATC
