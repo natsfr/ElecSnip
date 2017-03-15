@@ -29,7 +29,7 @@ DEV_DECLARE_STATIC(cpu_dev, "cpu", DEVICE_FLAG_CPU, arm32m_drv,
 #include <arch/stm32/f1/rcc.h>
 #include <mutek/startup.h>
 
-#include "nats_i2c.h"
+//#include "nats_i2c.h"
 #include "register_map.h"
 
 DEV_DECLARE_STATIC(gpio_dev, "gpio", 0, stm32_gpio_drv,
@@ -175,7 +175,7 @@ void stm32_clock_init() {
     cpu_mem_write_32(STM32_RCC_ADDR + STM32_RCC_APB2ENR_ADDR, -1);
 }
 
-void nats_i2c_init() {
+/*void nats_i2c_init() {
     uint16_t cr1_old = 0;
     uint16_t cr2_old = 0;
     uint16_t ccr_old = 0;
@@ -192,7 +192,7 @@ void nats_i2c_init() {
     cpu_mem_write_16(NATS_I2C1_ADDR + NATS_I2C_CCR_ADDR, ccr_old); // set SCK ~= 50kHz
     
     cpu_mem_write_16(NATS_I2C1_ADDR + NATS_I2C_TRISE_ADDR, 0x0025);
-}
+}*/
 
 struct device_spi_ctrl_s dac_spi;
 struct device_i2c_ctrl_s pll_i2c;
@@ -235,7 +235,8 @@ void change_pll_reg(Reg_Data si_reg) {
         
         rq.transfer_count = 1;
         dev_i2c_wait_transaction(&pll_i2c, &rq);
-    } else {
+        printk("Index: %d : Write: %d\n", si_reg.Reg_Addr, dwrite[1]);
+    } else if(si_reg.Reg_Mask != 0x00) {
         uint8_t dwrite[2];
         dwrite[0] = si_reg.Reg_Addr;
         transfers[0].data = dwrite;
@@ -260,6 +261,7 @@ void change_pll_reg(Reg_Data si_reg) {
         
         rq.transfer_count = 1;
         dev_i2c_wait_transaction(&pll_i2c, &rq);
+        printk("Index: %d : Read: %d - Write: %d\n",  si_reg.Reg_Addr, read_buf[0], dwrite[1]);
     }
 }
 
@@ -303,7 +305,7 @@ void main() {
     
     // test pll init
     for(uint16_t i = 0; i < 349; i++) {
-        change_plli_reg(Reg_Store[i]);
+        change_pll_reg(Reg_Store[i]);
     }
     
 }
