@@ -30,6 +30,7 @@ DEV_DECLARE_STATIC(cpu_dev, "cpu", DEVICE_FLAG_CPU, arm32m_drv,
 #include <mutek/startup.h>
 
 #include "nats_i2c.h"
+#include "register_map.h"
 
 DEV_DECLARE_STATIC(gpio_dev, "gpio", 0, stm32_gpio_drv,
     DEV_STATIC_RES_DEV_ICU("/cpu"),
@@ -194,6 +195,7 @@ void nats_i2c_init() {
 }
 
 struct device_spi_ctrl_s dac_spi;
+struct device_i2c_ctrl_s pll_i2c;
 struct device_gpio_s d_gpio;
 
 void dac_spi_write(struct device_spi_ctrl_s *spi, uint32_t cs_pin, uint8_t *data, size_t s) {
@@ -212,9 +214,59 @@ void app_start() {
     
 }
 
+void change_pll_reg(Reg_Data si_reg) {
+    uint8_t read_buf[1];
+    struct dev_i2c_ctrl_transaction_rq_s rq;
+    
+    dev_i2c_transaction_init(&rq);
+    
+    struct dev_i2c_ctrl_transaction_data_s transfers[2];
+    
+    rq.base.saddr = 0x70;
+    rq.transfer = transfers;
+    
+    if(si_reg.Reg_Mask == 0xFF) {
+        uint8_t dwrite[2];
+        dwrite[0] = si_reg.Reg_Addr;
+        dwrite[1] = si_reg.Reg_Val;
+        transfers[0].data = dwrite;
+        transfers[0].size = 2;
+        transfers[0].type = DEV_I2C_CTRL_TRANSACTION_WRITE;
+        
+        rq.transfer_count = 1;
+        dev_i2c_wait_transaction(&pll_i2c, &rq);
+    } else {
+        uint8_t dwrite[2];
+        dwrite[0] = si_reg.Reg_Addr;
+        transfers[0].data = dwrite;
+        transfers[0].size = 1;
+        transfers[0].type = DEV_I2C_CTRL_TRANSACTION_WRITE;
+        
+        rq.transfer_count = 1;
+        dev_i2c_wait_transaction(&pll_i2c, &rq);
+        
+        transfers[0].data = read_buf;
+        transfers[0].size = sizeof(read_buf);
+        transfers[0].type = DEV_I2C_CTRL_TRANSACTION_READ;
+        
+        rq.transfer_count = 1;
+        dev_i2c_wait_transaction(&pll_i2c, &rq);
+        
+        dwrite[0] = si_reg.Reg_Addr;
+        dwrite[1] = (read_buf[0] & (~si_reg.Reg_Mask)) | (si_reg.Reg_Val & si_reg.Reg_Mask);
+        transfers[0].data = dwrite;
+        transfers[0].size = 2;
+        transfers[0].type = DEV_I2C_CTRL_TRANSACTION_WRITE;
+        
+        rq.transfer_count = 1;
+        dev_i2c_wait_transaction(&pll_i2c, &rq);
+    }
+}
+
 void main() {
     device_get_accessor_by_path(&dac_spi.base, NULL, "spi1", DRIVER_CLASS_SPI_CTRL);
     device_get_accessor_by_path(&d_gpio.base, NULL, "gpio", DRIVER_CLASS_GPIO);
+    device_get_accessor_by_path(&pll_i2c.base, NULL, "i2c0", DRIVER_CLASS_I2C_CTRL);
     
     // Init LED BECAUSE U NO RAVE PARTY !
     dev_gpio_mode(&d_gpio, RED_LED, DEV_PIN_PUSHPULL);
@@ -249,6 +301,9 @@ void main() {
     dac_spi_write(&dac_spi, CS_DAC, (const uint8_t*)"\x75\x00\x00", 3); // Set all ref to internal 2.5V
     dac_spi_write(&dac_spi, CS_DAC, (const uint8_t*)"\x2F\xFF\x00", 3); // Set all dac to maximum
     
-    //nats_i2c_init();
+    // test pll init
+    for(uint16_t i = 0; i < 349; i++) {
+        change_plli_reg(Reg_Store[i]);
+    }
     
 }
