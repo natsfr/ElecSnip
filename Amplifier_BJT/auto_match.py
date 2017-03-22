@@ -18,6 +18,7 @@ class TransistorBlock:
     def __init__(self, file, freq, config):
         self.freq = freq
         self.config = config
+        self.spformats = {}
         self.parse_spar(file,freq)
     
     ''' Open S2P Files and extract data '''
@@ -25,17 +26,45 @@ class TransistorBlock:
         f = open(file, "r")
         tmpspars = []
         for line in f:
-            tmpspars.append(line.strip().split())
+            if line.startswith("#"):
+                sfor = line.strip().split()
+                self.spformats["UNIT"] = sfor[1]
+                self.spformats["TYPE"] = sfor[2]
+                self.spformats["FORMAT"] = sfor[3]
+                # Apparently the nominal Impedance is splitted: R 50
+                self.spformats["R"] = sfor[5]
+            elif not line.startswith("!"):
+                tmpspars.append(line.strip().split())
         
-        self.spars = {}#[] # 1: Freq 2: S11 3: S21 4: S12 5: S22
+        # Parse options: we mainly need to know unit and complex format
+        # http://cp.literature.agilent.com/litweb/pdf/genesys200801/sim/linear_sim/sparams/touchstone_file_format.htms
+        
+        self.spars = {}# 1: Freq 2: S11 3: S21 4: S12 5: S22
         for l in tmpspars:
             if(l[0] != "!" and l[0] != "#"):
                 tmp = []
-                tmp.append(complex(float(l[1]), float(l[2]))) # S11
-                tmp.append(complex(float(l[3]), float(l[4]))) # S21
-                tmp.append(complex(float(l[5]), float(l[6]))) # S12
-                tmp.append(complex(float(l[7]), float(l[8]))) # S22
-                self.spars[float(l[0])] = tmp
+                if self.spformats["FORMAT"] == "RI" : # Real Imaginary
+                    tmp.append(complex(float(l[1]), float(l[2]))) # S11
+                    tmp.append(complex(float(l[3]), float(l[4]))) # S21
+                    tmp.append(complex(float(l[5]), float(l[6]))) # S12
+                    tmp.append(complex(float(l[7]), float(l[8]))) # S22
+                elif self.spformats["FORMAT"] == "MA" : # Magnitude Angle
+                    tmp.append(cmath.rect(float(l[1]), float(l[2]))) # S11
+                    tmp.append(cmath.rect(float(l[3]), float(l[4]))) # S21
+                    tmp.append(cmath.rect(float(l[5]), float(l[6]))) # S12
+                    tmp.append(cmath.rect(float(l[7]), float(l[8]))) # S22
+                else :
+                    print("Unsupported Number Format: %s" % self.spformats["FORMAT"])
+                    exit(-1)
+                # We always set freq to MHz
+                freq = float(l[0])
+                if self.spformats["UNIT"] == "GHz":
+                    freq = freq * 1000
+                elif self.spformats["UNIT"] == "KHz":
+                    freq = freq / 1000
+                elif self.spformats["UNIT"] == "Hz":
+                    freq = freq / 1000000
+                self.spars[freq] = tmp
 
     ''' Calculate John Rollett stability factor '''
     def calc_stab(self):
@@ -54,10 +83,15 @@ class TransistorBlock:
         if self.B1 < 0 :
             ksq = math.sqrt(self.K**2 - 1)
         else :
-            ksq = math.sqrt(self.k**2 - 1) * -1
+            ksq = math.sqrt(self.K**2 - 1) * -1
         
         self.MAG = 10 * math.log(cmath.polar(S[11])[0] / cmath.polar(S[12])[0]) + \
             10 * math.log(self.K + ksq)
+    
+    ''' Calculate Maximum Unilateral Gain (S12 = 0)'''
+    def calc_gum(self):
+        S = self.S
+        self.GUM = 10 * math.log(cmath.polar(S[21])[0]**2 / ((1-cmath.polar(S[11])[0]**2)*(1-cmath.polar(S[22])[0]**2)))
     
     def set_freq(self, freq):
         self.freq = freq
@@ -84,7 +118,7 @@ class TransistorBlock:
             print("Maximum Available Gain: %fdB" % self.MAG)
     
     def calc_scm(self):
-        S = self S
+        S = self.S
         if self.K > 1 :
             self.C1 = S[11] - (self.Ds * complex.conjugate(S[22]))
             self.C2 = S[22] - (self.Ds * complex.conjugate(S[11]))
@@ -102,4 +136,5 @@ if __name__ == '__main__':
     config = sys.argv[3]
     q1 = TransistorBlock(fname, freq, config)
     q1.calc_stability_mag()
-    
+    q1.calc_gum()
+    print("GUM: %fdB" % q1.GUM)
