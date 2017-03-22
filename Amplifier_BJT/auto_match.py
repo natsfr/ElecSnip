@@ -85,13 +85,13 @@ class TransistorBlock:
         else :
             ksq = math.sqrt(self.K**2 - 1) * -1
         
-        self.MAG = 10 * math.log(cmath.polar(S[11])[0] / cmath.polar(S[12])[0]) + \
-            10 * math.log(self.K + ksq)
+        self.MAG = 10 * math.log10(cmath.polar(S[11])[0] / cmath.polar(S[12])[0]) + \
+            10 * math.log10(self.K + ksq)
     
     ''' Calculate Maximum Unilateral Gain (S12 = 0)'''
     def calc_gum(self):
         S = self.S
-        self.GUM = 10 * math.log(cmath.polar(S[21])[0]**2 / ((1-cmath.polar(S[11])[0]**2)*(1-cmath.polar(S[22])[0]**2)))
+        self.GUM = 10 * math.log10(cmath.polar(S[21])[0]**2 / ((1-cmath.polar(S[11])[0]**2)*(1-cmath.polar(S[22])[0]**2)))
     
     def set_freq(self, freq):
         self.freq = freq
