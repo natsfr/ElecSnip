@@ -30,6 +30,8 @@ DEV_DECLARE_STATIC(cpu_dev, "cpu", DEVICE_FLAG_CPU, arm32m_drv,
 #include <mutek/startup.h>
 
 //#include "nats_i2c.h"
+
+// PLL config
 #include "register_map.h"
 
 DEV_DECLARE_STATIC(gpio_dev, "gpio", 0, stm32_gpio_drv,
@@ -265,6 +267,73 @@ void change_pll_reg(Reg_Data si_reg) {
     }
 }
 
+
+static TERMUI_CON_COMMAND_PROTOTYPE(test_command)
+{
+    termui_con_printf(con, "PLL init with 0ps phase offset: use the set_phase with number of 20ps step");
+    return 0;
+}
+
+int16_t steps[4] = {};
+
+// For each step we set the MSn_PHIDCT
+static TERMUI_CON_COMMAND_PROTOTYPE(set_phase) {
+    uint8_t pll_num = strto_intl16(argv[0], NULL, 0);
+    int16_t step = strto_intl16(argv[1], NULL, 0);
+    
+    termui_con_printf(con, "%d, %d\n", pll_num, step);
+    
+    // pll registers
+    pll_num = pll_num * 11 + 52;
+    
+    // inc = value to write
+    
+    uint8_t inc = 0;
+    if(step > 0) inc = 2;
+    else if(step < 0) {
+        step = step *-1;
+        inc = 3;
+    } else return 0;
+    
+    // phase inc/dec should be limited by i2c speed
+    // si5338.pdf page 27
+    
+    struct dev_i2c_ctrl_transaction_rq_s rq;
+    struct dev_i2c_ctrl_transaction_data_s transfer[1];
+    
+    dev_i2c_transaction_init(&rq);
+    rq.base.saddr = 0x70;
+    rq.transfer = transfer;
+    rq.transfer_count = 1;
+    
+    uint8_t dwrite[2];
+    dwrite[0] = pll_num;
+    dwrite[1] = inc;
+    
+    transfer[0].data = dwrite;
+    transfer[0].size = 2;
+    transfer[0].type = DEV_I2C_CTRL_TRANSACTION_WRITE;
+    
+    for(int16_t i = 0; i < step; i++) {
+        dev_i2c_wait_transaction(&pll_i2c, &rq);
+    }
+    
+    return 0;
+}
+
+static TERMUI_CON_GROUP_DECL(root_group) = {
+    TERMUI_CON_BUILTIN_HELP(-1)
+    TERMUI_CON_BUILTIN_LIST(-1)
+    TERMUI_CON_BUILTIN_QUIT(-1)
+    
+    TERMUI_CON_ENTRY(test_command, "test")
+    TERMUI_CON_ENTRY(set_phase, "set_phase", TERMUI_CON_HELP("Set phase offset by step of 20ps", NULL) TERMUI_CON_ARGS(2,2))
+    
+    TERMUI_CON_LIST_END
+};
+
+MUTEK_SHELL_ROOT_GROUP(root_group, "nats")
+
 void main() {
     device_get_accessor_by_path(&dac_spi.base, NULL, "spi1", DRIVER_CLASS_SPI_CTRL);
     device_get_accessor_by_path(&d_gpio.base, NULL, "gpio", DRIVER_CLASS_GPIO);
@@ -304,8 +373,10 @@ void main() {
     dac_spi_write(&dac_spi, CS_DAC, (const uint8_t*)"\x2F\xFF\x00", 3); // Set all dac to maximum
     
     // test pll init
-    for(uint16_t i = 0; i < 349; i++) {
+    for(uint16_t i = 0; i < 351; i++) {
         change_pll_reg(Reg_Store[i]);
     }
+    
+    return 0;
     
 }

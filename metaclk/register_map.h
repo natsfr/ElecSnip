@@ -2,7 +2,7 @@
 //http://www.silabs.com/clocks 
 //Copyright 2012 Silicon Laboratories
 //#BEGIN_HEADER
-//Date = Wednesday, March 15, 2017 12:09 AM
+//Date = Monday, March 20, 2017 5:42 PM
 //File version = 3
 //Software Name = ClockBuilder Desktop
 //Software version = 6.4
@@ -63,20 +63,18 @@
 // Output voltage = 3.30
 // Output type = 3.3V LVDS
 // Output state when disabled = StopLow
-//Clock 0 phase inc/dec step size (ns) = 0.000
-//Clock 1 phase inc/dec step size (ns) = 0.000
-//Clock 2 phase inc/dec step size (ns) = 0.000
+//Clock 0 phase inc/dec step size (ns) = 0.0200
+//Clock 1 phase inc/dec step size (ns) = 0.0200
+//Clock 2 phase inc/dec step size (ns) = 0.0200
 //Clock 3 phase inc/dec step size (ns) = 0.000
 //Phase increment and decrement pin control is off
 //Frequency increment and decrement pin control is off
 //Frequency increment and decrement is disabled
 //Initial phase offset 0 (ns) = 0.000
-//Initial phase offset 1 (ns) = 5.000
-//Initial phase offset 2 (ns) = 10.000
+//Initial phase offset 1 (ns) = 0.000
+//Initial phase offset 2 (ns) = 0.000
 //Initial phase offset 3 (ns) = 0.000
 //SSC is disabled
-
-#define NUM_REGS_MAX 350
 
 typedef struct Reg_Data{
    unsigned char Reg_Addr;
@@ -194,15 +192,15 @@ Reg_Data Reg_Store[] = {
 {106,0x80,0xBF},
 {107,0x00,0xFF},
 {108,0x00,0xFF},
-{109,0x00,0xFF},
+{109,0x07,0xFF},
 {110,0x40,0xFF},
-{111,0x80,0xFF},
-{112,0x06,0xFF},
-{113,0x00,0xFF},
+{111,0x00,0xFF},
+{112,0x00,0xFF},
+{113,0x07,0xFF},
 {114,0x40,0xFF},
 {115,0x00,0xFF},
-{116,0x8D,0xFF},
-{117,0x00,0xFF},
+{116,0x80,0xFF},
+{117,0x07,0xFF},
 {118,0x40,0xFF},
 {119,0x00,0xFF},
 {120,0x00,0xFF},
@@ -433,5 +431,7 @@ Reg_Data Reg_Store[] = {
 { 92,0x00,0x00},
 { 93,0x00,0x00},
 { 94,0x00,0x00},
-{255, 0, 0xFF} }; // set page bit to 0
+{255,0x00,0xFF},
+{246,0x02,0xFF}, // soft reset
+{230,0x00,0xFF}}; // enable all output
 //End of file
