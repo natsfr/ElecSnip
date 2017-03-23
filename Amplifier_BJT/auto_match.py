@@ -13,6 +13,13 @@ import sys
 import math
 import cmath
 
+def print_complex(name, c):
+    print("====")
+    print(name)
+    print("Rect: %f %fj" % (c.real , c.imag))
+    print("Polar: %f %fj" % (cmath.polar(c)[0] , math.degrees(cmath.polar(c)[1])))
+    print("====")
+
 class TransistorBlock:
     
     def __init__(self, file, freq, config):
@@ -48,11 +55,11 @@ class TransistorBlock:
                     tmp.append(complex(float(l[3]), float(l[4]))) # S21
                     tmp.append(complex(float(l[5]), float(l[6]))) # S12
                     tmp.append(complex(float(l[7]), float(l[8]))) # S22
-                elif self.spformats["FORMAT"] == "MA" : # Magnitude Angle
-                    tmp.append(cmath.rect(float(l[1]), float(l[2]))) # S11
-                    tmp.append(cmath.rect(float(l[3]), float(l[4]))) # S21
-                    tmp.append(cmath.rect(float(l[5]), float(l[6]))) # S12
-                    tmp.append(cmath.rect(float(l[7]), float(l[8]))) # S22
+                elif self.spformats["FORMAT"] == "MA" : # Magnitude Angle (in degree)
+                    tmp.append(cmath.rect(float(l[1]), math.radians(float(l[2])))) # S11
+                    tmp.append(cmath.rect(float(l[3]), math.radians(float(l[4])))) # S21
+                    tmp.append(cmath.rect(float(l[5]), math.radians(float(l[6])))) # S12
+                    tmp.append(cmath.rect(float(l[7]), math.radians(float(l[8])))) # S22
                 else :
                     print("Unsupported Number Format: %s" % self.spformats["FORMAT"])
                     exit(-1)
@@ -85,7 +92,7 @@ class TransistorBlock:
         else :
             ksq = math.sqrt(self.K**2 - 1) * -1
         
-        self.MAG = 10 * math.log10(cmath.polar(S[11])[0] / cmath.polar(S[12])[0]) + \
+        self.MAG = 10 * math.log10(cmath.polar(S[21])[0] / cmath.polar(S[12])[0]) + \
             10 * math.log10(self.K + ksq)
     
     ''' Calculate Maximum Unilateral Gain (S12 = 0)'''
@@ -123,9 +130,30 @@ class TransistorBlock:
             self.C1 = S[11] - (self.Ds * complex.conjugate(S[22]))
             self.C2 = S[22] - (self.Ds * complex.conjugate(S[11]))
             # B1 is already calculated for MAG
-            self.B2 = 1 - cmath.polar(S[11])[0] ** 2 - cmath.polar(S[22])[0] ** 2 - cmath.polar(self.Ds)[0] ** 2
+            self.B2 = 1 + cmath.polar(S[22])[0] ** 2 - cmath.polar(S[11])[0] ** 2 - cmath.polar(self.Ds)[0] ** 2
+            
+            rad = 0
+            if self.B2 >= 0:
+                rad = self.B2 - math.sqrt(self.B2**2 - 4 * cmath.polar(self.C2)[0]**2)
+            elif self.B2 < 0:
+                rad = self.B2 + math.sqrt(self.B2**2 - 4 * cmath.polar(self.C2)[0]**2)
+            
+            # Load Reflection magnitude
+            ref_mag = rad / (2 * cmath.polar(self.C2)[0])
+            
+            self.load_ref = cmath.rect(ref_mag, -cmath.polar(self.C2)[1])
+            
+            self.source_ref = complex.conjugate(S[11] + ((S[12]*S[21]*self.load_ref) / (1-(self.load_ref * S[22]))))
+            
         else :
             print("Can't calculate SCM, K < 1, try lossy match")
+    
+    #Calculate Transducer gain
+    def calc_gt(self):
+        S = self.S
+        a = ((abs(S[21])**2)*(1-abs(self.source_ref)**2)*(1-abs(self.load_ref)**2))
+        b = abs((1-S[11]*self.source_ref)*(1-S[22]*self.load_ref)-S[12]*S[21]*self.load_ref*self.source_ref)**2
+        self.GT = 10*math.log10(a/b)
     
 if __name__ == '__main__':
     if(len(sys.argv) < 4):
@@ -138,3 +166,11 @@ if __name__ == '__main__':
     q1.calc_stability_mag()
     q1.calc_gum()
     print("GUM: %fdB" % q1.GUM)
+    q1.calc_scm()
+    q1.calc_gt()
+    print("Result")
+    print("Input Impedance to match")
+    print_complex("Input Reflection", q1.source_ref)
+    print("Output Impedance to match")
+    print_complex("Load Reflection", q1.load_ref)
+    print("Transducer gain: %fdB" % q1.GT)
