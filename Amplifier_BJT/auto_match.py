@@ -41,7 +41,9 @@ class TransistorBlock:
                 # Apparently the nominal Impedance is splitted: R 50
                 self.spformats["R"] = sfor[5]
             elif not line.startswith("!"):
-                tmpspars.append(line.strip().split())
+                tmpline = line.strip().split()
+                if len(tmpline) >= 9: #We skip short line often used for noise parameter
+                    tmpspars.append(tmpline)
         
         # Parse options: we mainly need to know unit and complex format
         # http://cp.literature.agilent.com/litweb/pdf/genesys200801/sim/linear_sim/sparams/touchstone_file_format.htms
