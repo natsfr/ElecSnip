@@ -20,6 +20,16 @@ def print_complex(name, c):
     print("Polar: %f %fj" % (cmath.polar(c)[0] , math.degrees(cmath.polar(c)[1])))
     print("====")
 
+# needed for test on polar
+def polar_add(ar, ai, br, bi):
+    a = cmath.rect(ar, math.degrees(ai))
+    b = cmath.rect(br, math.degrees(bi))
+    print_complex("polar res", a + b)
+
+def pol2rec(ar, ai):
+    a = cmath.rect(ar, math.radians(ai))
+    return a
+
 class TransistorBlock:
     
     def __init__(self, file, freq, config):
@@ -171,8 +181,13 @@ if __name__ == '__main__':
     q1.calc_scm()
     q1.calc_gt()
     print("Result")
-    print("Input Impedance to match")
-    print_complex("Input Reflection", q1.source_ref)
-    print("Output Impedance to match")
+    print("Optimum Source Reflection")
+    print_complex("Source Reflection", q1.source_ref)
+    print("Optimum Load Reflection")
     print_complex("Load Reflection", q1.load_ref)
     print("Transducer gain: %fdB" % q1.GT)
+    
+    # test book error
+    a = pol2rec(0.4,162) + ((pol2rec(0.04,60)*pol2rec(5.2,63)*pol2rec(0.487,39)) / (1 - pol2rec(0.487,39)*pol2rec(0.35,-39)))
+    print_complex("test", a)
+    print_complex("test", complex.conjugate(a))
