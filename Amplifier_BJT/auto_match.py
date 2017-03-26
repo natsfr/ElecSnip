@@ -30,6 +30,10 @@ def pol2rec(ar, ai):
     a = cmath.rect(ar, math.radians(ai))
     return a
 
+# Reflection Coefficient = (Zl-Z0) / (Zl+Z0)
+def ref2z(ref, z0):
+    return (ref*z0+z0)/(ref-1)
+
 class TransistorBlock:
     
     def __init__(self, file, freq, config):
@@ -188,6 +192,10 @@ if __name__ == '__main__':
     print("Transducer gain: %fdB" % q1.GT)
     
     # test book error
-    a = pol2rec(0.4,162) + ((pol2rec(0.04,60)*pol2rec(5.2,63)*pol2rec(0.487,39)) / (1 - pol2rec(0.487,39)*pol2rec(0.35,-39)))
+    '''a = pol2rec(0.4,162) + ((pol2rec(0.04,60)*pol2rec(5.2,63)*pol2rec(0.487,39)) / (1 - pol2rec(0.487,39)*pol2rec(0.35,-39)))
     print_complex("test", a)
-    print_complex("test", complex.conjugate(a))
+    print_complex("test", complex.conjugate(a))'''
+    
+    # test ref to z
+    print_complex("Load Impedance", ref2z(q1.load_ref,50))
+    print_complex("Source Impedance", ref2z(q1.source_ref,50))
