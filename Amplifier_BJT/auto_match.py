@@ -32,7 +32,7 @@ def pol2rec(ar, ai):
 
 # Reflection Coefficient = (Zl-Z0) / (Zl+Z0)
 def ref2z(ref, z0):
-    return (ref*z0+z0)/(ref-1)
+    return -(ref*z0+z0)/(ref-1)
 
 class TransistorBlock:
     
@@ -53,7 +53,7 @@ class TransistorBlock:
                 self.spformats["TYPE"] = sfor[2]
                 self.spformats["FORMAT"] = sfor[3]
                 # Apparently the nominal Impedance is splitted: R 50
-                self.spformats["R"] = sfor[5]
+                self.spformats["R"] = int(sfor[5])
             elif not line.startswith("!"):
                 tmpline = line.strip().split()
                 if len(tmpline) >= 9: #We skip short line often used for noise parameter
@@ -197,5 +197,6 @@ if __name__ == '__main__':
     print_complex("test", complex.conjugate(a))'''
     
     # test ref to z
-    print_complex("Load Impedance", ref2z(q1.load_ref,50))
-    print_complex("Source Impedance", ref2z(q1.source_ref,50))
+    norm_R = complex(q1.spformats["R"], 0)
+    print_complex("Load Impedance", ref2z(q1.load_ref,norm_R))
+    print_complex("Source Impedance", ref2z(q1.source_ref,norm_R))
