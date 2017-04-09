@@ -283,6 +283,8 @@ static TERMUI_CON_COMMAND_PROTOTYPE(set_phase) {
     
     termui_con_printf(con, "%d, %d\n", pll_num, step);
     
+    steps[pll_num] += step;
+    
     // pll registers
     pll_num = pll_num * 11 + 52;
     
@@ -317,6 +319,9 @@ static TERMUI_CON_COMMAND_PROTOTYPE(set_phase) {
     for(int16_t i = 0; i < step; i++) {
         dev_i2c_wait_transaction(&pll_i2c, &rq);
     }
+    
+    termui_con_printf(con, "Step are 20ps\n");
+    termui_con_printf(con, "pll 0: %d, pll 1: %d, pll 2: %d, pll 3: %d\n", steps[0], steps[1], steps[2], steps[3]);
     
     return 0;
 }
