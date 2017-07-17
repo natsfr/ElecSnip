@@ -30,9 +30,58 @@ def pol2rec(ar, ai):
     a = cmath.rect(ar, math.radians(ai))
     return a
 
+# Reac to value (f in MHz)
+def reac2val(reac, f):
+    val = 0
+    f = f*1000000
+    if(reac < 0):
+        val = (1/(2*math.pi*f*reac))*-1
+    elif(reac > 0):
+        val = reac/(2*math.pi*f)
+    return val
+
+def val2reac(val, f, c, unit):
+    reac = 0
+    f = f*1000000
+    if unit == "p":
+        val = val / 10**12
+    elif unit == "n":
+        val = val / 10**9
+    elif unit == "u":
+        val = val / 10**6
+    elif unit == "m":
+        val = val / 10**3
+
+    if c:
+        reac = 1/(2*math.pi*f*val)
+    else:
+        reac = 2*math.pi*f*val
+    return reac
+
 # Reflection Coefficient = (Zl-Z0) / (Zl+Z0)
+# return impedance
 def ref2z(ref, z0):
     return -(ref*z0+z0)/(ref-1)
+
+def z2ref(z1, z0):
+    return (z1-z0)/(z1+z0)
+
+# 1/Parallel Impedance = (1/Z0)+(1/Z1)
+def z2par(z0, z1):
+    return (z0*z1)/(z0+z1)
+
+def par2z(par, z0):
+    return (par*z0)/(z0-par)
+
+# Calculate match
+# input: initial Z and target Z | Low pass ? | freq in MHz
+def matchL(zs, zl, lp, freq):
+    rs = cmath.real(zs)
+    rl = cmath.real(zl)
+    Q = math.sqrt(rl/rs-1)
+    xstmp = Q * rs
+    xltmp = Q * rl
+    return 0
 
 class TransistorBlock:
     
