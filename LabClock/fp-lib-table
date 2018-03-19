@@ -1,0 +1,9 @@
+(fp_lib_table
+  (lib (name Mounting_Holes)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/Mounting_Holes.pretty)(options "")(descr ""))
+  (lib (name Connectors_RF)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/Connectors_RF.pretty)(options "")(descr ""))
+  (lib (name Oscillators)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/Oscillators.pretty)(options "")(descr ""))
+  (lib (name Connectors_Power)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/Connectors_POWER.pretty)(options "")(descr ""))
+  (lib (name QFN)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/QFN.pretty)(options "")(descr ""))
+  (lib (name General_SMD)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/General_SMD.pretty)(options "")(descr ""))
+  (lib (name SOIC)(type KiCad)(uri $KIPRJMOD/../../kicad-components/Pretty_Footprints/SOIC.pretty)(options "")(descr ""))
+)
